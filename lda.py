@@ -8,6 +8,11 @@ import codecs
 import os
 
 from collections import OrderedDict
+import sys
+
+reload(sys)
+
+sys.setdefaultencoding('utf-8')
 #获取当前路径
 path = os.getcwd()
 #导入日志配置文件
@@ -22,6 +27,7 @@ conf = ConfigParser.ConfigParser()
 conf.read("setting.conf") 
 #文件路径
 trainfile = os.path.join(path,os.path.normpath(conf.get("filepath", "trainfile")))
+
 wordidmapfile = os.path.join(path,os.path.normpath(conf.get("filepath","wordidmapfile")))
 thetafile = os.path.join(path,os.path.normpath(conf.get("filepath","thetafile")))
 phifile = os.path.join(path,os.path.normpath(conf.get("filepath","phifile")))
@@ -210,6 +216,12 @@ def preprocessing():
     logger.info(u'载入数据......')
     with codecs.open(trainfile, 'r','utf-8') as f:
         docs = f.readlines()
+       #去除停用词
+       # stoplist = {}.fromkeys([line.strip() for line in open("./data/stopword.txt")])
+       # docs = [word.encode('utf-8') for word in list(docs)]
+
+       # docs = [word for word in list(docs) if word not in stoplist]
+
     logger.debug(u"载入完成,准备生成字典对象和统计文本数据...")
     dpre = DataPreProcessing()
     items_idx = 0
